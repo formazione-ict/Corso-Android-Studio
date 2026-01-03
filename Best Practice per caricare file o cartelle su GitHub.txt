@@ -1,0 +1,67 @@
+Best Practice per caricare file o cartelle su GitHub.
+Distinguiamo due scenari comuni: quando aggiorni un progetto esistente e quando ne carichi uno nuovo da zero.
+
+Scenario A: Aggiungere una cartella/file in un repository esistente
+
+1. Aggiorna il repository locale (Fondamentale)
+Prima di aggiungere qualsiasi cosa, assicurati di essere allineato col server per evitare conflitti.
+git pull origin main
+
+2. Crea/Copia i file fisicamente
+Crea la nuova cartella (es. Lezione 1) o incolla i file dentro la cartella del progetto nel tuo computer.
+
+3. Aggiungi i file all'area di stage (Staging Area)
+Questo comando dice a Git: "Prepara questi nuovi file per il prossimo salvataggio".
+git add .
+(Il punto . indica "tutto quello che è cambiato nella cartella corrente e sotto-cartelle")
+
+4. Fai il Commit (Salvataggio locale)
+git commit -m "Aggiunta lezione 11: gestione frammenti"
+
+5. Invia al server (Push)
+git push origin main
+
+Scenario B: Caricare un nuovo progetto da zero
+(Quando crei una nuova App che non c'entra nulla con le altre)
+
+1. Crea il Repository su GitHub
+Vai sul sito di GitHub -> Tasto + in alto a destra -> New Repository.
+
+Consiglio: Seleziona "Add .gitignore" e scegli "Android" dal menu a tendina (ti spiego sotto perché).
+
+Clicca "Create repository".
+
+Copia l'URL del repo (quello che finisce con .git).
+
+2. Inizializza Git in locale
+Apri PowerShell dentro la cartella del tuo progetto:
+git init
+(Questo crea la cartella nascosta .git).
+
+3. Collega il remoto
+git remote add origin https://github.com/TUO-USER/TUO-REPO.git
+
+4. Scarica il gitignore (se creato al punto 1)
+git pull origin main
+
+5. Add, Commit, Push
+git add .
+git commit -m "Initial commit"
+git push -u origin main
+(L'opzione -u serve solo la prima volta per collegare il ramo locale a quello remoto).
+
+Regola d'Oro
+Per non avere il problema della "cartella grigia" o del "submodule":
+NON digitare MAI git init dentro una cartella che è già dentro un altro repository Git.
+Se sei dentro la cartella madre, Git sta già controllando tutto. Se entri in una sottocartella e fai git init, crei un conflitto di gestione (repository nidificato).
+Approfondimento Tecnico: Il file .gitignore
+Visto che lavori con Android Studio, questo è cruciale. Quando compili un'app, Android Studio crea centinaia di file temporanei (nella cartella build/ e .gradle/).
+Questi file NON devono mai finire su GitHub. Appesantiscono il caricamento e creano errori se scaricati su un altro PC.
+Assicurati che nella radice del tuo progetto ci sia un file chiamato .gitignore che contenga regole come:
+/build
+.gradle
+/app/build
+.idea
+*.iml
+Se usi il generatore di .gitignore di GitHub (Scenario B, punto 1), lo fa lui in automatico.
+
