@@ -61,12 +61,22 @@ Le risorse sono file esterni al codice Java/Kotlin che permettono di supportare 
 -	layout/: Definizioni XML della UI.
 -	values/: Contiene strings.xml (localizzazione), colors.xml (palette) e themes.xml.
 
-**Approfondimento: La classe R**
+**Approfondimento**:
+
+La classe R
+
 Quando compili l'app, Android Studio genera la classe R. È un indice di ID interi che puntano alle risorse.
 -	In XML: **@string/nome_risorsa**
 -	In Kotlin/Java: **R.string.nome_risorsa**
-## 2.4 Esempio pratico (Kotlin)
+## 2.4 Esempio Testo che cambia (Kotlin)
 Colleghiamo la logica alla UI. Supponiamo di voler cambiare il testo della TextView al click del Button.
+
+    package com.example.testo_che_cambia
+
+    import android.os.Bundle
+    import androidx.appcompat.app.AppCompatActivity
+    import android.widget.Button
+    import android.widget.TextView
 
     class MainActivity : AppCompatActivity() {
         override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,17 +84,17 @@ Colleghiamo la logica alla UI. Supponiamo di voler cambiare il testo della TextV
             // Inflating del layout: trasforma l'XML in oggetti di memoria
             setContentView(R.layout.activity_main)
 
-        // Referenziamento delle View tramite ID
-        val myButton: Button = findViewById(R.id.action_button)
-        val myTextView: TextView = findViewById(R.id.welcome_text)
+            // Referenziamento delle View tramite ID
+            val myButton: Button = findViewById(R.id.action_button)
+            val myTextView: TextView = findViewById(R.id.welcome_text)
 
-        // Listener per l'evento click
-        myButton.setOnClickListener {
-            // Accediamo a una risorsa stringa dinamicamente
-            myTextView.text = getString(R.string.button_clicked_message)
-            
-            // Logica tecnica: forziamo un aggiornamento della UI se necessario
-            myTextView.invalidate() 
+            // Listener per l'evento click
+            myButton.setOnClickListener {
+                // Accediamo a una risorsa stringa dinamicamente
+                myTextView.text = getString(R.string.button_clicked_message)
+
+                // Logica tecnica: forziamo un aggiornamento della UI se necessario
+                myTextView.invalidate()
             }
         }
     }
