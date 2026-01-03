@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#EEEEEE">
+
+    <!-- View 1: solo margin -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_margin="16dp"
+        android:background="#FF5722" />
+
+    <!-- View 2: solo padding (contenuto interno visibile con un TextView) -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:padding="16dp"
+        android:background="#4CAF50"
+        android:text="Padding interno"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp" />
+
+    <!-- View 3: margin + padding -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_margin="16dp"
+        android:padding="16dp"
+        android:background="#2196F3"
+        android:text="Margin + Padding"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp" />
+
+</LinearLayout>
