@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Testo_che_cambia</string>
+    <string name="hello_world">Hello World!</string>
+    <string name="button_clicked_message">Button clicked!</string>
+</resources>

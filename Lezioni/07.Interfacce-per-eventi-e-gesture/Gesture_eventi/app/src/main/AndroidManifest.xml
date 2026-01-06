@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
+
+        <!-- LauncherActivity come launcher principale (TEST) -->
+        <activity
+            android:name="com.esempio.gesture_eventi.LauncherActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name="com.esempio.gesture_eventi.MainActivity" android:exported="false" />
+
+        <!-- Esempio 1: Canvas Disegno -->
+        <activity
+            android:name="com.esempio.gesture_eventi.DrawingActivity"
+            android:label="Esempio 1: Canvas Disegno"
+            android:exported="false" />
+
+        <!-- Esempio 2: Listener -->
+        <activity
+            android:name="com.esempio.gesture_eventi.ListenerDemoActivity"
+            android:label="Esempio 2: Listener"
+            android:exported="false" />
+
+        <!-- Esempio 3: GestureDetector -->
+        <activity
+            android:name="com.esempio.gesture_eventi.GestureDetectorActivity"
+            android:label="Esempio 3: GestureDetector"
+            android:exported="false" />
+
+        <!-- Esempio 4: Zoom e Rotazione -->
+        <activity
+            android:name="com.esempio.gesture_eventi.ZoomRotateActivity"
+            android:label="Esempio 4: Zoom e Rotazione"
+            android:exported="false" />
+
+    </application>
+
+</manifest>

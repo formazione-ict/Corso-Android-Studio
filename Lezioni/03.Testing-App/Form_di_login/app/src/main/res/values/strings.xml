@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Form_di_login</string>
+    <string name="title_text">Accesso Sistema</string>
+    <string name="username_hint">Username</string>
+    <string name="password_hint">Password</string>
+    <string name="login_button_text">LOGIN</string>
+</resources>

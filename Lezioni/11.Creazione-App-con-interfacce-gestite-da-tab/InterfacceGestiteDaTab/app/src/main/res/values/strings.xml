@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">InterfacceGestiteDaTab</string>
+    <string name="descrizione_tab_layout">Pannello con le schede per navigare tra le sezioni</string>
+</resources>
