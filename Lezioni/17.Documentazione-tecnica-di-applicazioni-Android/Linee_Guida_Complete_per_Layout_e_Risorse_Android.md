@@ -1,6 +1,6 @@
 # Linee Guida Complete per Layout e Risorse Android
 
-Queste convenzioni seguono le best practices ufficiali Android e sono ampiamente adottate dalla community, garantendo progetti ben organizzati, manutenibili e facilmente comprensibili da qualsiasi sviluppatore.[2][6][3][7][5][4][1]
+Queste convenzioni seguono le best practices ufficiali Android e sono ampiamente adottate dalla community, garantendo progetti ben organizzati, manutenibili e facilmente comprensibili da qualsiasi sviluppatore.
 
 ## Layout Files - Convenzioni di Naming
 
@@ -827,5 +827,3 @@ Le stringhe seguono il pattern `<CONTEXT>_<DESCRIPTOR>`.
 | FAB | `fab_` | `fab_add` |
 | ProgressBar | `progress_` | `progress_loading` |
 ```
-
-***
