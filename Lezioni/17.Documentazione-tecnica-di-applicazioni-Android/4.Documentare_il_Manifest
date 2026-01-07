@@ -1,0 +1,201 @@
+# 4. Documentare il Manifest
+
+## 4.1 AndroidManifest.xml Commentato
+Il file Manifest dichiara componenti, permessi e configurazioni dell'app. 
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.myweatherapp">
+
+    <!-- ========== PERMESSI ========== -->
+    
+    <!-- Permesso per accedere a Internet (richiesto per API meteo) -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    
+    <!-- Permesso per verificare lo stato della connessione -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    
+    <!-- Permessi per geolocalizzazione (opzionali) -->
+    <!-- COARSE: posizione approssimativa (città) -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- FINE: posizione precisa (GPS) -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    
+    <!-- Permesso per ricevere notifiche push (Android 13+) -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"
+        android:minSdkVersion="33" />
+    
+    <!-- Permesso per vibrare con le notifiche -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <!-- ========== FEATURES RICHIESTE ========== -->
+    
+    <!-- GPS opzionale: l'app funziona anche senza -->
+    <uses-feature
+        android:name="android.hardware.location.gps"
+        android:required="false" />
+    
+    <!-- Touchscreen richiesto -->
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="true" />
+
+    <application
+        android:name=".WeatherApplication"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.MyWeatherApp"
+        android:usesCleartextTraffic="false"
+        tools:targetApi="31">
+
+        <!-- ========== MAIN ACTIVITY ========== -->
+        
+        <!-- Activity principale: entry point dell'applicazione -->
+        <activity
+            android:name=".ui.MainActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize">
+            
+            <!-- Intent filter per rendere l'app lanciabile -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            
+            <!-- Deep link per aprire città specifica -->
+            <!-- Esempio: myweather://city/milano -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="myweather"
+                    android:host="city"
+                    android:pathPrefix="/" />
+            </intent-filter>
+        </activity>
+
+        <!-- ========== SERVICES ========== -->
+        
+        <!-- Service per aggiornamento periodico meteo in background -->
+        <service
+            android:name=".service.WeatherSyncService"
+            android:enabled="true"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        
+        <!-- Firebase Cloud Messaging per notifiche push -->
+        <service
+            android:name=".service.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <!-- ========== BROADCAST RECEIVERS ========== -->
+        
+        <!-- Receiver per gestire cambio di connettività -->
+        <receiver
+            android:name=".receiver.ConnectivityReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
+        <!-- ========== CONTENT PROVIDERS ========== -->
+        
+        <!-- FileProvider per condivisione sicura di screenshot meteo -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <!-- ========== METADATA ========== -->
+        
+        <!-- API Key per servizio meteo (da nascondere in produzione) -->
+        <meta-data
+            android:name="com.example.weather.API_KEY"
+            android:value="${WEATHER_API_KEY}" />
+        
+        <!-- Configurazione Google Maps (se usata) -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${MAPS_API_KEY}" />
+
+    </application>
+
+</manifest>
+```
+
+## 4.2 Documentazione Permessi Runtime
+
+```text
+## Gestione Permessi
+
+### Permessi Pericolosi (Runtime)
+
+L'app richiede i seguenti permessi runtime con rationale chiare:
+
+#### ACCESS_FINE_LOCATION
+- **Quando**: Al primo avvio o quando l'utente clicca "Usa posizione corrente"
+- **Rationale**: "Per fornirti previsioni meteo accurate per la tua posizione attuale"
+- **Fallback**: L'utente può cercare manualmente la città
+- **Codice**:
+
+```kotlin
+/**
+ * Richiede il permesso di geolocalizzazione con rationale educativa.
+ * 
+ * Se il permesso è già stato negato, mostra un dialog esplicativo
+ * prima di richiedere nuovamente. Se negato permanentemente, apre
+ * le impostazioni dell'app.
+ */
+private fun requestLocationPermission() {
+    when {
+        ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED -> {
+            // Permesso già concesso
+            getCurrentLocation()
+        }
+        
+        shouldShowRequestPermissionRationale(
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) -> {
+            // Mostra rationale prima di richiedere
+            showLocationRationaleDialog()
+        }
+        
+        else -> {
+            // Richiedi permesso
+            locationPermissionLauncher.launch(
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+        }
+    }
+}
+```
+
+POST_NOTIFICATIONS (Android 13+)
+-	Quando: Dopo che l'utente ha salvato la prima località
+-	Rationale: "Ricevi allerte meteo importanti per le tue località preferite"
+-	Fallback: L'app funziona normalmente senza notifiche
+```text
