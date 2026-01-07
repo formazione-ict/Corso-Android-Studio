@@ -55,8 +55,8 @@ public class MainActivity extends AppCompatActivity {
 ```
 
 **Punti chiave:**
-•	new Thread(() -> {...}).start(); crea e avvia il thread in background. 
-•	Non si può aggiornare la UI direttamente dal thread secondario: si usa Handler legato al Looper.getMainLooper() per postare il codice sul Main thread. 
+- new Thread(() -> {...}).start(); crea e avvia il thread in background. 
+- Non si può aggiornare la UI direttamente dal thread secondario: si usa Handler legato al Looper.getMainLooper() per postare il codice sul Main thread. 
 
 ### Esempio 2 – Thread che aggiorna una ProgressBar
 Esempio leggermente più evoluto: una ProgressBar viene aggiornata gradualmente da un thread in background. 
@@ -99,16 +99,16 @@ public class MainActivity extends AppCompatActivity {
 ```
 
 **Nota:**
-•	Separare sempre lavoro (loop, sleep, rete) dal codice che tocca la UI. 
-•	In progetti reali, Gestire la cancellazione del thread e la chiusura dell’Activity per evitare leak. 
+- Separare sempre lavoro (loop, sleep, rete) dal codice che tocca la UI. 
+- In progetti reali, Gestire la cancellazione del thread e la chiusura dell’Activity per evitare leak. 
 ________________________________________
 ## AsyncTask: struttura e uso (deprecato)
 AsyncTask era una classe di supporto per eseguire operazioni in background e aggiornare la UI in modo più semplice, ora deprecata da Android 11 (API 30). 
 
 **Caratteristiche principali:**
-•	Template con metodi chiave: onPreExecute(), doInBackground(), onProgressUpdate(), onPostExecute().
-•	doInBackground() gira in background; onPreExecute, onProgressUpdate e onPostExecute sul Main thread per interagire con la UI. 
-•	Deprecata per problemi di leak, gestione ciclo di vita e comportamento incoerente su versioni diverse. 
+- Template con metodi chiave: onPreExecute(), doInBackground(), onProgressUpdate(), onPostExecute().
+- doInBackground() gira in background; onPreExecute, onProgressUpdate e onPostExecute sul Main thread per interagire con la UI. 
+- Deprecata per problemi di leak, gestione ciclo di vita e comportamento incoerente su versioni diverse. 
 
 ### Esempio 3 – AsyncTask semplice con ProgressBar/Testo
 
@@ -189,26 +189,26 @@ public class MainActivity extends AppCompatActivity {
 ```
 
 **Osservazioni:**
-•	Parametri generici <Params, Progress, Result> e relativa corrispondenza nei metodi. 
-•	execute(...) avvia il task; doInBackground() non può aggiornare direttamente la UI, ma usa publishProgress() che chiama onProgressUpdate() sul Main thread. 
-•	onPostExecute() viene chiamato alla fine per aggiornare la UI con il risultato. 
+- Parametri generici <Params, Progress, Result> e relativa corrispondenza nei metodi. 
+- `execute(...)` avvia il task; `doInBackground()` non può aggiornare direttamente la UI, ma usa `publishProgress()` che chiama `onProgressUpdate()` sul Main thread. 
+- `onPostExecute()` viene chiamato alla fine per aggiornare la UI con il risultato. 
 
 ## Perché AsyncTask è deprecato e alternative moderne
 
 **Best practice attuali:**
-•	Problemi di memory leak: AsyncTask come inner class non statica mantiene un riferimento implicito all’Activity. 
-•	Non è lifecycle aware: se l’utente ruota lo schermo o chiude l’Activity, il task può continuare e provare ad aggiornare una UI distrutta, causando crash. 
-•	Gestione thread poco controllabile (pool condiviso, ordine di esecuzione non sempre prevedibile). 
+- Problemi di memory leak: AsyncTask come inner class non statica mantiene un riferimento implicito all’Activity. 
+- Non è lifecycle aware: se l’utente ruota lo schermo o chiude l’Activity, il task può continuare e provare ad aggiornare una UI distrutta, causando crash. 
+- Gestione thread poco controllabile (pool condiviso, ordine di esecuzione non sempre prevedibile). 
 
 **Alternative raccomandate oggi:**
-•	Per Java: ExecutorService e API java.util.concurrent per thread pool più controllabili. 
-•	Per Kotlin: coroutines (soprattutto con ViewModel e viewModelScope) per codice asincrono più leggibile e lifecycle aware. 
-•	Per lavori programmati o “lungi”: WorkManager o JobScheduler. 
+- Per Java: ExecutorService e API java.util.concurrent per thread pool più controllabili. 
+- Per Kotlin: coroutines (soprattutto con ViewModel e viewModelScope) per codice asincrono più leggibile e lifecycle aware. 
+- Per lavori programmati o “lungi”: WorkManager o JobScheduler. 
 
 **Suggerimenti:*
-•	Introduzione teorica: Main thread, ANR, perché servono thread/background. 
-•	Esempio 1: Thread + Handler con TextView. 
-•	Esempio 2: Thread + Handler con ProgressBar. 
-•	Esempio 3: AsyncTask completo (con discussione sui problemi e sulla deprecazione). 
+- Introduzione teorica: Main thread, ANR, perché servono thread/background. 
+- Esempio 1: Thread + Handler con TextView. 
+- Esempio 2: Thread + Handler con ProgressBar. 
+- Esempio 3: AsyncTask completo (con discussione sui problemi e sulla deprecazione). 
 •	Alternative moderne (Executor, coroutines, WorkManager) e indicazione che nei progetti nuovi AsyncTask non va più usato. 
 
